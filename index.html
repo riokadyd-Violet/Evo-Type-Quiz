@@ -96,7 +96,7 @@
     document.getElementById('retake').onclick=()=>start(true);moveFocus();
   }
   async function copyText(){
-    const t=displayedType(), link=/^https?:$/.test(location.protocol)?location.href.split(/[?#]/)[0]:'';
+    const t=displayedType(), link='https://riokadyd-violet.github.io/Evo-Type-Quiz/';
     const text=`I got ${t.code} — ${t.name}! 👑\n“${t.quote}”\nWhat’s your Evo Type?${link?'\n'+link:''}`;
     try{await navigator.clipboard.writeText(text);document.getElementById('status').textContent='Copied! Paste it into your community chat.';}
     catch(e){const extra=document.getElementById('share-extra');extra.innerHTML='<label class="tiny" for="manual-share">Select and copy your share text:</label><textarea class="share-fallback" id="manual-share" readonly></textarea>';const field=document.getElementById('manual-share');field.value=text;field.focus();field.select();document.getElementById('status').textContent='Copy the text below to share your result.';}
