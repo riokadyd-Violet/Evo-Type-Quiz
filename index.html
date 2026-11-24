@@ -90,7 +90,11 @@
   function displayedType(){const t={...byCode(result.code)};if(result.balanced){t.name='Balanced Edition';t.quote='A little of everything. Entirely your own.';t.description='Your answers stayed right in the middle, so no single play style stood out. Your approach may change with your mood, your teammates, or the moment. Consider VIBE your starting point, and explore the other types too.';t.tags=['Flexible','Balanced','Open-minded'];t.buddyText='Any type can be your kind of teammate. It depends on the day.';}return t;}
   function renderResult(){
     screen='result';const t=displayedType();
-    main.innerHTML=`<section class="result"><div class="eyebrow result-kicker"><span class="dot"></span>Your royal reveal</div><div class="result-panel" style="--tint:${t.tint};--type:${t.color}"><div class="result-art">${picture(t.code)}</div><div class="result-copy"><div class="eyebrow">Your Evo Type is</div><div class="result-code">${t.code}</div><h1 class="result-name">${t.name}</h1><p class="quote">“${t.quote}”</p><p class="description">${t.description}</p><div class="tags">${t.tags.map(x=>`<span class="tag">${x}</span>`).join('')}</div><div class="buddy"><div class="eyebrow">${result.balanced?'Your party potential':`Your duo energy · ${t.buddy}`}</div><p>${t.buddyText}</p></div></div></div><div class="result-actions"><button class="primary" id="download">Download result card <span aria-hidden="true">↓</span></button><button class="secondary" id="copy">Copy share text ↗</button><button class="text-btn" id="retake">Take it again</button></div><p class="tiny result-foot">Save your card and share it in your community. Find your type twins—or your next co-op partner.</p><div class="status" id="status" role="status" aria-live="polite"></div><div id="share-extra"></div></section>`;
+    main.innerHTML=`<section class="result"><div class="eyebrow result-kicker"><span class="dot"></span>Your royal reveal</div><div class="result-panel" style="--tint:${t.tint};--type:${t.color}"><div class="result-art">${picture(t.code)}</div><div class="result-copy"><div class="eyebrow">Your Evo Type is</div><div class="result-code">${t.code}</div><h1 class="result-name">${t.name}</h1><p class="quote">“${t.quote}”</p><p class="description">${t.description}</p><div class="tags">${t.tags.map(x=>`<span class="tag">${x}</span>`).join('')}</div><div class="buddy"><div class="eyebrow">${result.balanced?'Your party potential':`Your duo energy · ${t.buddy}`}</div><p>${t.buddyText}</p>
+<p>
+  Join our Discord for more events:
+  <a href="https://discord.gg/evodefense" target="_blank" rel="noopener noreferrer">https://discord.gg/evodefense</a>
+</p></div></div></div><div class="result-actions"><button class="primary" id="download">Download result card <span aria-hidden="true">↓</span></button><button class="secondary" id="copy">Copy share text ↗</button><button class="text-btn" id="retake">Take it again</button></div><p class="tiny result-foot">Save your card and share it in your community. Find your type twins—or your next co-op partner.</p><div class="status" id="status" role="status" aria-live="polite"></div><div id="share-extra"></div></section>`;
     document.getElementById('download').onclick=downloadCard;
     document.getElementById('copy').onclick=copyText;
     document.getElementById('retake').onclick=()=>start(true);moveFocus();
@@ -106,8 +110,8 @@
     const button=document.getElementById('download'), status=document.getElementById('status');button.disabled=true;status.textContent='Preparing your card…';
     try{
       const t=displayedType(), img=new Image(), logo=new Image();img.src=ART[t.code];logo.src=document.getElementById('brand-logo').src;await Promise.all([img.decode(),logo.decode()]);
-      const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1520;const ctx=canvas.getContext('2d');
-      ctx.fillStyle='#f7f5ee';ctx.fillRect(0,0,1080,1520);ctx.fillStyle=t.tint;ctx.fillRect(0,0,1080,740);
+      const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1580;const ctx=canvas.getContext('2d');
+      ctx.fillStyle='#f7f5ee';ctx.fillRect(0,0,1080,1580);ctx.fillStyle=t.tint;ctx.fillRect(0,0,1080,740);
       // Original logo, with only its transparent outer padding excluded from the layout.
       ctx.drawImage(logo,167,37,621,602,65,28,150,150*602/621);
       ctx.fillStyle='#263c35';ctx.font='700 25px Arial';ctx.fillText('EVO TYPE / COMMUNITY EDITION',250,65);ctx.font='20px Arial';ctx.fillText('YOUR WAY TO PLAY',250,100);
@@ -116,7 +120,9 @@
       ctx.font='700 29px Arial';let y=wrapText(ctx,'“'+t.quote+'”',65,987,950,40)+22;
       ctx.font='25px Arial';ctx.fillStyle='#586b60';y=wrapText(ctx,t.description,65,y,950,37)+23;
       ctx.fillStyle=t.color;ctx.font='700 23px Arial';ctx.fillText(t.tags.join('  /  '),65,y);
-      ctx.fillStyle='#d1d6c8';ctx.fillRect(65,1410,950,1);ctx.fillStyle='#586b60';ctx.font='22px Arial';ctx.fillText('What’s your Evo Type? Find your type. Find your people.',65,1455);ctx.font='17px Arial';ctx.fillText('A community quiz, just for fun. Not a psychological assessment.',65,1490);
+      ctx.fillStyle='#d1d6c8';ctx.fillRect(65,1410,950,1);ctx.fillStyle='#586b60';ctx.font='22px Arial';ctx.fillText('What’s your Evo Type? Find your type. Find your people.',65,1455);ctx.font='17px Arial';ctx.fillText('A community quiz, just for fun. Not a psychological assessment.',65,1490);ctx.fillStyle='#245a46';
+ctx.font='20px Arial';
+ctx.fillText('Join our Discord for more events: https://discord.gg/evodefense',65,1540);
       const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Card export unavailable')),'image/png'));
       const url=URL.createObjectURL(blob), a=document.createElement('a');a.href=url;a.download=`Evo-Type-${t.code}${result.balanced?'-Balanced':''}.png`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);status.textContent='Your card is ready. If it opens in a new tab on mobile, save the image there.';
     }catch(e){status.textContent='The card could not be saved in this browser. You can still take a screenshot of your result.';}finally{button.disabled=false;}
